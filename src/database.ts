@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 const PATH_TO_DATABASE = './database.json';
-interface ISecret {
+export interface ISecret {
     id: number,
     name: string,
     secret: string

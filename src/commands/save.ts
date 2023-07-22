@@ -8,29 +8,23 @@ import chalk from "chalk";
 const questions = [
     {
         type: 'input',
-        message: 'name: (The name of the secret to keep)',
+        message: `${chalk.green('name')}: (The name of the secret to keep)`,
         name: 'name'
     },
     {
         type: 'password',
-        message: 'secret: (The secret itself, don\'t worry, it will be safe)',
+        message: `${chalk.green('secret')}: (The secret itself, don\'t worry, it will be safe)`,
         name: 'secret'
     },
     {
         type: 'password',
-        message: 'secret-confirmation: (The secret confirmation to avoid mistakes)',
+        message: `${chalk.green('secret-confirmation')}: (The secret confirmation to avoid mistakes)`,
         name: 'secretConfirmation'
     }
 ]
 
 export const saveCommandName = 'save [name]';
 export const saveCommandDescription = 'Create a new secret or update an existing one';
-export const saveCommandHelper = (yargs: any) => {
-    return yargs.positional('name', {
-        describe: 'The name of the secret, if not set, it will be taken interactively'
-    });
-}
-
 export const saveCommandHandler = async (argv: Record<string, string>) => {
     if (argv.name) {
         questions.shift();

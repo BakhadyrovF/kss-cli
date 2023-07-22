@@ -7,7 +7,7 @@ import { deleteBySecretName } from "../database";
 export const rmCommandName = 'rm [name]';
 export const rmCommandDescription = 'Delete a specific secret by the given name'
 export const rmCommandHandler = async (argv: Record<string, string>) => {
-    let secretName = '';
+    let secretName: string;
     if (argv.name) {
         secretName = argv.name
     } else {
@@ -48,7 +48,7 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
     });
 
     if (!confirmation.removalConfirmation) {
-        console.log(chalk.red('Operation cancelled.'))
+        console.log(chalk.red('\nOperation cancelled.'))
         return;
     }
 

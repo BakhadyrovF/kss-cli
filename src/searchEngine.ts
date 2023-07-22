@@ -5,7 +5,8 @@ const minisearch = new Minisearch({
     fields: ['name'],
     storeFields: ['name'],
     searchOptions: {
-        fuzzy: 0.2
+        fuzzy: 0.3,
+        prefix: true
     }
 });
 
