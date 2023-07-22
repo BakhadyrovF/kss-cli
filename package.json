@@ -15,6 +15,7 @@
     "dotenv": "^16.3.1",
     "enquirer": "^2.3.6",
     "macos-touchid": "^1.0.3",
+    "minisearch": "^6.1.0",
     "node-clipboardy": "^1.0.3",
     "node-encryption": "^1.0.2",
     "pkg": "^5.8.1",

@@ -1,7 +1,7 @@
 import { prompt } from "enquirer";
 import { exitWithError } from '../utilities';
 import { insertNewSecret } from "../database";
-import { encrypt, decrypt } from 'node-encryption'
+import { encrypt } from 'node-encryption'
 import chalk from "chalk";
 
 

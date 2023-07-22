@@ -1,33 +1,67 @@
 import fs from 'fs';
 
-export const insertNewSecret = (secretName: string, secret: string) => {
-    insert({
-        name: secretName,
-        secret: secret
-    });
+const PATH_TO_DATABASE = './database.json';
+interface ISecret {
+    id: number,
+    name: string,
+    secret: string
 }
 
-const insert = (payload: Record<string, string>): void => {
+export const insertNewSecret = (secretName: string, secret: string) => {
     if (!fs.existsSync(PATH_TO_DATABASE)) {
-        fs.writeFileSync(PATH_TO_DATABASE, JSON.stringify([payload]));
+        fs.writeFileSync(PATH_TO_DATABASE, JSON.stringify([{
+            id: getIdForNewSecret(),
+            name: secretName,
+            secret
+        }]));
     } else {
         const secrets = getAll();
-        secrets.push(payload);
+        secrets.push(
+            {
+                id: getIdForNewSecret(),
+                name: secretName,
+                secret
+            }
+        );
         fs.writeFileSync(PATH_TO_DATABASE, JSON.stringify(secrets));
     }
 }
 
-const getAll = (): Array<Record<string, string>> => {
-    const secrets = fs.readFileSync(PATH_TO_DATABASE).toString();
-    console.log('get all', secrets);
+export const getAll = (): Array<ISecret> => {
+    let secrets: Array<ISecret> = [];
+    try {
+        const secretsJson = fs.readFileSync(PATH_TO_DATABASE).toString();
 
-    if (!secrets) {
-        return [];
+        if (secretsJson) {
+            return JSON.parse(secretsJson);
+        }
+    } catch {
+        return secrets;
     }
 
-    return JSON.parse(secrets);
+    return secrets
 }
 
-const PATH_TO_DATABASE = './database.json';
+const insert = (payload: Omit<ISecret, 'id'>): void => {
+
+}
+
+const getIdForNewSecret = (): number => {
+    const secrets = getAll();
+
+    if (!secrets) {
+        return 1;
+    }
+
+    const latestSecret = secrets.at(secrets.length - 1);
+
+    if (!latestSecret) {
+        return 1;
+    }
+
+    return latestSecret.id as number + 1;
+}
+
+
 
 
