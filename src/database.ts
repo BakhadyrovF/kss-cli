@@ -15,7 +15,7 @@ export const insertNewSecret = (secretName: string, secret: string) => {
             secret
         }]));
     } else {
-        const secrets = getAll();
+        const secrets = getAllSecrets();
         secrets.push(
             {
                 id: getIdForNewSecret(),
@@ -27,7 +27,7 @@ export const insertNewSecret = (secretName: string, secret: string) => {
     }
 }
 
-export const getAll = (): Array<ISecret> => {
+export const getAllSecrets = (): Array<ISecret> => {
     let secrets: Array<ISecret> = [];
     try {
         const secretsJson = fs.readFileSync(PATH_TO_DATABASE).toString();
@@ -42,12 +42,16 @@ export const getAll = (): Array<ISecret> => {
     return secrets
 }
 
-const insert = (payload: Omit<ISecret, 'id'>): void => {
+export const deleteBySecretName = (secretName: string): void => {
+    const secrets = getAllSecrets();
 
+    const secretsWithoutTarget = secrets.filter(secret => secret.name !== secretName);
+
+    fs.writeFileSync(PATH_TO_DATABASE, JSON.stringify(secretsWithoutTarget));
 }
 
 const getIdForNewSecret = (): number => {
-    const secrets = getAll();
+    const secrets = getAllSecrets();
 
     if (!secrets) {
         return 1;

@@ -1,13 +1,17 @@
 import Minisearch from 'minisearch';
-import { getAll } from './database';
+import { getAllSecrets } from './database';
 
 const minisearch = new Minisearch({
-    fields: ['secretName'],
+    fields: ['name'],
+    storeFields: ['name'],
+    searchOptions: {
+        fuzzy: 0.2
+    }
 });
 
 
 export const searchBySecretName = (secretName: string) => {
-    minisearch.addAll(getAll());
+    minisearch.addAll(getAllSecrets());
     const searchResults = minisearch.search(secretName);
 
     return searchResults;
