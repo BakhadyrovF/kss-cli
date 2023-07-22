@@ -1,1 +1,0 @@
-console.log('It works, isn`t it?');

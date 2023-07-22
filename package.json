@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/node": "^20.4.2",
     "nodemon": "^3.0.1",
     "typescript": "^5.1.6"
   },
@@ -10,7 +11,13 @@
     "serve": "nodemon build/index.js"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "dotenv": "^16.3.1",
+    "enquirer": "^2.3.6",
     "macos-touchid": "^1.0.3",
-    "node-clipboardy": "^1.0.3"
+    "node-clipboardy": "^1.0.3",
+    "node-encryption": "^1.0.2",
+    "pkg": "^5.8.1",
+    "yargs": "^17.7.2"
   }
 }
