@@ -21,7 +21,7 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
     const searchResults: Array<SearchResult> = searchBySecretName(secretName);
 
     if (searchResults.length === 0) {
-        console.log(chalk.red(`No matches found for the given name: '${chalk.green(secretName)}'`));
+        console.log(chalk.red(`No matches found for the given name: ${chalk.green(`'${secretName}'`)}`));
         return;
     }
 
@@ -31,7 +31,7 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
         const confirmation: Record<string, boolean> = await prompt({
             type: 'confirm',
             name: 'isRightSecret',
-            message: `Secret '${chalk.green(secretName)}' not found. Did you mean '${chalk.green(closestMatch.name)}'?`
+            message: `Secret ${chalk.green(`'${secretName}'`)} not found. Did you mean ${chalk.green(`'${closestMatch.name}'`)}?`
         });
 
         if (!confirmation.isRightSecret) {
