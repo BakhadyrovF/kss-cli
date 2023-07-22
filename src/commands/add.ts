@@ -1,5 +1,5 @@
 import { prompt } from 'enquirer';
-import { exitWithError } from '../utilities';
+import { exitWithError, logSuccessMessage } from '../utilities';
 import { insertNewSecret } from '../database';
 import { encrypt } from 'node-encryption'
 import chalk from 'chalk';
@@ -24,8 +24,8 @@ const questions = [
     }
 ]
 
-export const saveCommandName = 'save [name]';
-export const saveCommandDescription = 'Create a new secret or update an existing one';
+export const saveCommandName = 'add [name]';
+export const saveCommandDescription = 'Add a new secret';
 export const saveCommandHandler = async (argv: Record<string, string>) => {
     if (argv.secretName) {
         questions.shift();
@@ -40,7 +40,7 @@ export const saveCommandHandler = async (argv: Record<string, string>) => {
 
     insertNewSecret(answers.secretName, encrypt(answers.secret, process.env.ENCRYPTION_KEY));
 
-    console.log(chalk.green('\nNew secret has been successfully saved. I will keep it safe for you!'));
+    logSuccessMessage('New secret has been successfully saved. I will keep it safe for you!');
 };
 
 const validateForBlankString = (answers: Record<string, string>): void => {

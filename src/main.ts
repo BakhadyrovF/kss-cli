@@ -1,5 +1,5 @@
 import yargs from 'yargs';
-import { saveCommandName, saveCommandDescription, saveCommandHandler } from './commands/save';
+import { saveCommandName, saveCommandDescription, saveCommandHandler } from './commands/add';
 import { rmCommandName, rmCommandDescription, rmCommandHandler } from './commands/rm';
 import dotenv from 'dotenv';
 import { lsCommandDescription, lsCommandHandler, lsCommandName } from './commands/ls';

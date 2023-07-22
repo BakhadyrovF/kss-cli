@@ -1,8 +1,9 @@
-import { prompt } from "enquirer";
-import { searchBySecretName } from "../searchEngine";
-import chalk from "chalk";
-import { SearchResult } from "minisearch";
-import { deleteBySecretName } from "../database";
+import { prompt } from 'enquirer';
+import { searchBySecretName } from '../searchEngine';
+import chalk from 'chalk';
+import { SearchResult } from 'minisearch';
+import { deleteBySecretName } from '../database';
+import { exitWithError, logSuccessMessage } from '../utilities';
 
 export const rmCommandName = 'rm [name]';
 export const rmCommandDescription = 'Delete a specific secret by the given name'
@@ -21,8 +22,7 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
     const searchResults: Array<SearchResult> = searchBySecretName(secretName);
 
     if (searchResults.length === 0) {
-        console.log(chalk.red(`No matches found for the given name: ${chalk.green(`'${secretName}'`)}`));
-        return;
+        exitWithError(`No matches found for the given name: ${chalk.green(`'${secretName}'`)}`);
     }
 
     const closestMatch = searchResults[0];
@@ -35,8 +35,7 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
         });
 
         if (!confirmation.isRightSecret) {
-            console.log(chalk.red('Operation cancelled.'));
-            return;
+            exitWithError('Operation cancelled.');
         }
         secretName = closestMatch.name;
     }
@@ -48,11 +47,10 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
     });
 
     if (!confirmation.removalConfirmation) {
-        console.log(chalk.red('\nOperation cancelled.'))
-        return;
+        exitWithError('Operation cancelled.');
     }
 
     deleteBySecretName(secretName);
 
-    console.log(chalk.green('Secret has been successfully removed.'));
+    logSuccessMessage('Secret has been successfully removed.');
 };
