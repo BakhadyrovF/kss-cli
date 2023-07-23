@@ -3,7 +3,7 @@ import { exitWithError, logSuccessMessage } from '../utilities';
 import { insertNewSecret } from '../database';
 import { encrypt } from 'node-encryption'
 import chalk from 'chalk';
-import { searchBySecretName } from '../searchEngine';
+import { searchBySecretName } from '../search-engine';
 
 
 const questions = [
@@ -24,9 +24,9 @@ const questions = [
     }
 ]
 
-export const saveCommandName = 'add [name]';
-export const saveCommandDescription = 'Add a new secret';
-export const saveCommandHandler = async (argv: Record<string, string>) => {
+export const addCommandName = 'add [name]';
+export const addCommandDescription = 'Add a new secret';
+export const addCommandHandler = async (argv: Record<string, string>) => {
     if (argv.secretName) {
         questions.shift();
     }

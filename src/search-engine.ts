@@ -3,7 +3,7 @@ import { getAllSecrets } from './database';
 
 const minisearch = new Minisearch({
     fields: ['name'],
-    storeFields: ['name'],
+    storeFields: ['name', 'secret'],
     searchOptions: {
         fuzzy: 0.3,
         prefix: true

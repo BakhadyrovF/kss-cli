@@ -1,6 +1,6 @@
 import { ISecret, getAllSecrets } from '../database';
 import { SearchResult } from 'minisearch';
-import { searchBySecretName } from '../searchEngine';
+import { searchBySecretName } from '../search-engine';
 import chalk from 'chalk';
 
 export const lsCommandName = 'ls [name]';

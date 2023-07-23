@@ -1,8 +1,9 @@
 import yargs from 'yargs';
-import { saveCommandName, saveCommandDescription, saveCommandHandler } from './commands/add';
+import { addCommandName, addCommandDescription, addCommandHandler } from './commands/add';
 import { rmCommandName, rmCommandDescription, rmCommandHandler } from './commands/rm';
 import dotenv from 'dotenv';
 import { lsCommandDescription, lsCommandHandler, lsCommandName } from './commands/ls';
+import { cpCommandDescription, cpCommandHandler, cpCommandName } from './commands/cp';
 
 const positionalName = (yargs: Record<string, Function>) => {
     yargs.positional('name', {
@@ -14,9 +15,10 @@ const commands = yargs
     .scriptName('kss-cli')
     .help('help')
     .version('1.0.0')
-    .command(saveCommandName, saveCommandDescription, positionalName, saveCommandHandler)
+    .command(addCommandName, addCommandDescription, positionalName, addCommandHandler)
     .command(rmCommandName, rmCommandDescription, positionalName, rmCommandHandler)
-    .command(lsCommandName, lsCommandDescription, positionalName, lsCommandHandler);
+    .command(lsCommandName, lsCommandDescription, positionalName, lsCommandHandler)
+    .command(cpCommandName, cpCommandDescription, positionalName, cpCommandHandler);
 
 yargs.getOptions().boolean.splice(-2);
 commands.parse();

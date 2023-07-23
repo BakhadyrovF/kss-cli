@@ -1,5 +1,5 @@
 import { prompt } from 'enquirer';
-import { searchBySecretName } from '../searchEngine';
+import { searchBySecretName } from '../search-engine';
 import chalk from 'chalk';
 import { SearchResult } from 'minisearch';
 import { deleteBySecretName } from '../database';
