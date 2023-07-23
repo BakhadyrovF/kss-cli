@@ -9,6 +9,8 @@ To install **KSS-CLI** globally, use the following **npm** command:
 ```bash
 npm install -g kss-cli
 ```
+> If command above gives an error, it is because `npm` can't create a symlink in your `usr/local/bin` (may be different depending on OS) directory.
+Since **KSS-CLI** only for personal usage in your own device, you can use `sudo` to resolve this error.  
 
 ## Key Features
 
