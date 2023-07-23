@@ -30,10 +30,14 @@ npm install -g kss-cli
 
 # Examples
 
-**Add (`add`) Command**: Use the `add` command to securely store a new secret.
+**Add (`add`) Command**. Use the `add` command to securely store a new secret:  
+![add command example](https://raw.githubusercontent.com/BakhadyrovF/kss-cli/master/media/examples/add.gif)
 
-**Remove (`rm`) Command**: Use the `rm` command to remove a specific secret.
+**Remove (`rm`) Command**. Use the `rm` command to remove a specific secret:
+![rm command example](https://raw.githubusercontent.com/BakhadyrovF/kss-cli/master/media/examples/rm.gif)
 
-**Copy (`cp`) Command**: Use the `cp` command to copy a specific secret to the clipboard.
+**Copy (`cp`) Command**. Use the `cp` command to copy a specific secret to the clipboard:
+![cp command example](https://raw.githubusercontent.com/BakhadyrovF/kss-cli/master/media/examples/cp.gif)
 
-**List (`ls`) Command**: Use the `ls` command to list all stored secrets or filter results based on `secret-name`:
+**List (`ls`) Command**. Use the `ls` command to list all stored secrets or filter results based on `secret-name`:
+![ls command example](https://raw.githubusercontent.com/BakhadyrovF/kss-cli/master/media/examples/ls.gif)
