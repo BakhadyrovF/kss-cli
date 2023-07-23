@@ -1,7 +1,7 @@
 {
   "name": "kss-cli",
   "description": "Keep Secrets Safe - Command Line Interface",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./main.js",
   "devDependencies": {
     "@types/node": "^20.4.2",
