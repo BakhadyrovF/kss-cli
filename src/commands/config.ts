@@ -13,7 +13,7 @@ const CONFIGURATION_OPTIONS_WITH_DESCRIPTION = [
 ];
 
 export const DEFAULT_CONFIGURATION = {
-    'keychainAlwaysAllow': 'disable'
+    'keychainAlwaysAllow': 'disabled'
 };
 
 export const configCommandName = 'config [ls]';
@@ -50,9 +50,9 @@ const keychainAlwaysAllow = async () => {
     const answer: Record<string, string> = await prompt({
         type: 'select',
         name: 'keychainAlwaysAllow',
-        message: `${chalk.green('keychain-always-allow')}: (current value - ${chalk.green(configurationOptions.keychainAlwaysAllow + 'd')})`,
+        message: `${chalk.green('keychain-always-allow')}: (current value - ${chalk.green(configurationOptions.keychainAlwaysAllow)})`,
         choices: ['enable', 'disable']
     });
 
-    await setConfigurationOptions({ ...configurationOptions, keychainAlwaysAllow: answer.keychainAlwaysAllow });
+    await setConfigurationOptions({ ...configurationOptions, keychainAlwaysAllow: answer.keychainAlwaysAllow + 'd' });
 }

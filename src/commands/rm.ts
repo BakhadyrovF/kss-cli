@@ -5,6 +5,7 @@ import { SearchResult } from 'minisearch';
 import { deleteBySecretName } from '../database';
 import { exitWithError, logSuccessMessage } from '../utilities';
 import { authenticate } from '../authentication';
+import { getConfigurationOptions } from '../keychain';
 
 export const rmCommandName = 'rm [name]';
 export const rmCommandDescription = 'Delete a specific secret by the given name'
@@ -51,10 +52,14 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
         exitWithError('Operation cancelled.');
     }
 
-    const isAuthenticated = await authenticate();
+    const isAlwaysAllowEnabled = (await getConfigurationOptions()).keychainAlwaysAllow === 'enabled';
 
-    if (!isAuthenticated) {
-        exitWithError('Authentication failed.');
+    if (isAlwaysAllowEnabled) {
+        const isAuthenticated = authenticate();
+
+        if (!isAuthenticated) {
+            exitWithError('Authentication failed');
+        }
     }
 
     deleteBySecretName(secretName);

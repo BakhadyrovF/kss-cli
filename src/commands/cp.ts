@@ -4,7 +4,8 @@ import { exitWithError, logSuccessMessage } from '../utilities';
 import chalk from 'chalk';
 import ncp from 'node-clipboardy';
 import { decrypt } from 'node-encryption';
-import { getEncryptionKey } from '../keychain';
+import { getConfigurationOptions, getEncryptionKey } from '../keychain';
+import { authenticate } from '../authentication';
 
 
 export const cpCommandName = 'cp [name]';
@@ -42,6 +43,16 @@ export const cpCommandHandler = async (argv: any) => {
             exitWithError('Operation cancelled.');
         }
         secretName = closestMatch.name;
+    }
+
+    const isAlwaysAllowEnabled = (await getConfigurationOptions()).keychainAlwaysAllow === 'enabled';
+
+    if (isAlwaysAllowEnabled) {
+        const isAuthenticated = authenticate();
+
+        if (!isAuthenticated) {
+            exitWithError('Authentication failed');
+        }
     }
 
     ncp.writeSync(decrypt(closestMatch.secret, encryptionKey).toString());
