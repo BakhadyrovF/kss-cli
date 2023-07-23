@@ -14,11 +14,21 @@
     "chalk": "^4.1.2",
     "dotenv": "^16.3.1",
     "enquirer": "^2.3.6",
+    "keytar": "^7.9.0",
     "macos-touchid": "^1.0.3",
     "minisearch": "^6.1.0",
     "node-clipboardy": "^1.0.3",
     "node-encryption": "^1.0.2",
     "pkg": "^5.8.1",
     "yargs": "^17.7.2"
+  },
+  "pkg": {
+    "output": "main",
+    "targets": [
+      "node18-macos-x64"
+    ],
+    "assets": [
+      "node_modules/macos-touchid/prebuilds"
+    ]
   }
 }

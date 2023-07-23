@@ -4,6 +4,8 @@ import { insertNewSecret } from '../database';
 import { encrypt } from 'node-encryption'
 import chalk from 'chalk';
 import { searchBySecretName } from '../search-engine';
+import { getEncryptionKey } from '../keychain';
+
 
 
 const questions = [
@@ -27,6 +29,7 @@ const questions = [
 export const addCommandName = 'add [name]';
 export const addCommandDescription = 'Add a new secret';
 export const addCommandHandler = async (argv: Record<string, string>) => {
+    const encryptionKey = await getEncryptionKey();
     if (argv.secretName) {
         questions.shift();
     }
@@ -38,7 +41,7 @@ export const addCommandHandler = async (argv: Record<string, string>) => {
     validateSecretConfirmation(answers.secret, answers.secretConfirmation);
     validateSecretNameForUniqueness(answers.secretName);
 
-    insertNewSecret(answers.secretName, encrypt(answers.secret, process.env.ENCRYPTION_KEY));
+    insertNewSecret(answers.secretName, encrypt(answers.secret, encryptionKey));
 
     logSuccessMessage('New secret has been successfully saved. I will keep it safe for you!');
 };

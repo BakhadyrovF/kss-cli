@@ -4,12 +4,13 @@ import { exitWithError, logSuccessMessage } from '../utilities';
 import chalk from 'chalk';
 import ncp from 'node-clipboardy';
 import { decrypt } from 'node-encryption';
-import { authenticate } from '../authentication';
+import { getEncryptionKey } from '../keychain';
 
 
 export const cpCommandName = 'cp [name]';
 export const cpCommandDescription = 'Copy specific secret to clipboard';
 export const cpCommandHandler = async (argv: any) => {
+    const encryptionKey = await getEncryptionKey();
     let secretName: string;
 
     if (argv.name) {
@@ -43,13 +44,7 @@ export const cpCommandHandler = async (argv: any) => {
         secretName = closestMatch.name;
     }
 
-    const isAuthenticated = await authenticate();
-
-    if (!isAuthenticated) {
-        exitWithError('Authentication failed.');
-    }
-
-    ncp.writeSync(decrypt(closestMatch.secret, process.env.ENCRYPTION_KEY).toString());
+    ncp.writeSync(decrypt(closestMatch.secret, encryptionKey).toString());
 
     logSuccessMessage(`Secret has been copied to clipboard.`);
 } 

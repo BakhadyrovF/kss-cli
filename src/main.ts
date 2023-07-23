@@ -4,6 +4,7 @@ import { rmCommandName, rmCommandDescription, rmCommandHandler } from './command
 import dotenv from 'dotenv';
 import { lsCommandDescription, lsCommandHandler, lsCommandName } from './commands/ls';
 import { cpCommandDescription, cpCommandHandler, cpCommandName } from './commands/cp';
+import { configCommandDescription, configCommandHandler, configCommandName } from './commands/config';
 
 const positionalName = (yargs: Record<string, Function>) => {
     yargs.positional('name', {
@@ -11,8 +12,8 @@ const positionalName = (yargs: Record<string, Function>) => {
     });
 }
 dotenv.config();
-const commands = yargs
-    .scriptName('kss-cli')
+const kss = yargs
+    .scriptName('kss')
     .help('help')
     .version('1.0.0')
     .demandCommand(1, 'You must provide at least one command.')
@@ -20,7 +21,12 @@ const commands = yargs
     .command(addCommandName, addCommandDescription, positionalName, addCommandHandler)
     .command(rmCommandName, rmCommandDescription, positionalName, rmCommandHandler)
     .command(lsCommandName, lsCommandDescription, positionalName, lsCommandHandler)
-    .command(cpCommandName, cpCommandDescription, positionalName, cpCommandHandler);
+    .command(cpCommandName, cpCommandDescription, positionalName, cpCommandHandler)
+    .command(configCommandName, configCommandDescription, (yargs: Record<string, Function>) => {
+        yargs.positional('ls', {
+            describe: 'List available configuration options with their description'
+        });
+    }, configCommandHandler);
 
 yargs.getOptions().boolean.splice(-2);
-commands.parse();
+kss.parse();
