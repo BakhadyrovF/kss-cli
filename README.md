@@ -2,6 +2,11 @@
 
 **KSS-CLI** is a powerful and secure Command Line Interface (CLI) tool designed to help developers manage and store sensitive information, such as passwords, API keys, and other secrets, in a safe and encrypted manner. With a strong focus on security and ease of use, **KSS-CLI** utilizes a Secrets Manager approach, allowing users to securely store their secrets on their local devices and access them through the CLI.
 
+## Prerequisites
+
+* `macOS`
+* `nodejs` installed
+
 ## Installation
 
 To install **KSS-CLI** globally, use the following **npm** command:
