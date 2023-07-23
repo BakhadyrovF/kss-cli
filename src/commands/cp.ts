@@ -48,7 +48,7 @@ export const cpCommandHandler = async (argv: any) => {
     const isAlwaysAllowEnabled = (await getConfigurationOptions()).keychainAlwaysAllow === 'enabled';
 
     if (isAlwaysAllowEnabled) {
-        const isAuthenticated = authenticate();
+        const isAuthenticated = await authenticate();
 
         if (!isAuthenticated) {
             exitWithError('Authentication failed');

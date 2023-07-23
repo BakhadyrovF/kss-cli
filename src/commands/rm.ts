@@ -55,7 +55,7 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
     const isAlwaysAllowEnabled = (await getConfigurationOptions()).keychainAlwaysAllow === 'enabled';
 
     if (isAlwaysAllowEnabled) {
-        const isAuthenticated = authenticate();
+        const isAuthenticated = await authenticate();
 
         if (!isAuthenticated) {
             exitWithError('Authentication failed');

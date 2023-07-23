@@ -30,12 +30,14 @@ export const addCommandName = 'add [name]';
 export const addCommandDescription = 'Add a new secret';
 export const addCommandHandler = async (argv: Record<string, string>) => {
     const encryptionKey = await getEncryptionKey();
-    if (argv.secretName) {
-        questions.shift();
+    let answers: Record<string, string>;
+    if (argv.name) {
+        answers = await prompt(questions.filter(question => question.name !== 'secretName'));
+    } else {
+        answers = await prompt(questions);
     }
 
-    const answers: Record<string, string> = await prompt(questions);
-    answers['secretName'] ??= argv.secretName;
+    answers['secretName'] ??= argv.name;
 
     validateForBlankString(answers);
     validateSecretConfirmation(answers.secret, answers.secretConfirmation);
