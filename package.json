@@ -1,14 +1,14 @@
 {
   "devDependencies": {
     "@types/node": "^20.4.2",
+    "esbuild": "^0.18.16",
     "nodemon": "^3.0.1",
     "typescript": "^5.1.6"
   },
   "scripts": {
-    "compile:js": "tsc",
-    "compile:bin": "pkg",
+    "compile": "esbuild ./src/main.ts --platform=node --target=node20 --packages=external --outdir=./ --bundle",
     "watch": "tsc --watch",
-    "serve": "nodemon build/index.js"
+    "serve": "nodemon ./main.js"
   },
   "dependencies": {
     "chalk": "^4.1.2",
