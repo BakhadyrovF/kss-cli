@@ -1,7 +1,6 @@
 import yargs from 'yargs';
 import { addCommandName, addCommandDescription, addCommandHandler } from './commands/add';
 import { rmCommandName, rmCommandDescription, rmCommandHandler } from './commands/rm';
-import dotenv from 'dotenv';
 import { lsCommandDescription, lsCommandHandler, lsCommandName } from './commands/ls';
 import { cpCommandDescription, cpCommandHandler, cpCommandName } from './commands/cp';
 import { configCommandDescription, configCommandHandler, configCommandName } from './commands/config';
@@ -11,7 +10,7 @@ const positionalName = (yargs: Record<string, Function>) => {
         describe: 'The name of the secret, if not set, it will be taken interactively'
     });
 }
-dotenv.config();
+
 const kss = yargs
     .scriptName('kss')
     .help('help')

@@ -13,7 +13,7 @@ const CONFIGURATION_OPTIONS_WITH_DESCRIPTION = [
 ];
 
 export const DEFAULT_CONFIGURATION = {
-    'keychainAlwaysAllow': 'disabled'
+    'keychainAlwaysAllow': 'enabled'
 };
 
 export const configCommandName = 'config [ls]';
