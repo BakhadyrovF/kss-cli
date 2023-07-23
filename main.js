@@ -42,7 +42,8 @@ ${message}`));
 
 // src/database.ts
 var import_fs = __toESM(require("fs"));
-var PATH_TO_DATABASE = "./database.json";
+var import_os = __toESM(require("os"));
+var PATH_TO_DATABASE = `${import_os.default.homedir()}/.kss-cli/secrets.json`;
 var insertNewSecret = (secretName, secret) => {
   if (!import_fs.default.existsSync(PATH_TO_DATABASE)) {
     import_fs.default.writeFileSync(PATH_TO_DATABASE, JSON.stringify([{
@@ -380,6 +381,12 @@ var cpCommandHandler = async (argv) => {
 };
 
 // src/main.ts
+var import_fs2 = __toESM(require("fs"));
+var import_os2 = __toESM(require("os"));
+var APP_DIRECTORY = `${import_os2.default.homedir()}/.kss-cli`;
+if (!import_fs2.default.existsSync(APP_DIRECTORY)) {
+  import_fs2.default.mkdirSync(APP_DIRECTORY);
+}
 var positionalName = (yargs2) => {
   yargs2.positional("name", {
     describe: "The name of the secret, if not set, it will be taken interactively"

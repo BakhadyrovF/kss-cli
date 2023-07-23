@@ -1,6 +1,8 @@
 import fs from 'fs';
+import os from 'os';
 
-const PATH_TO_DATABASE = './database.json';
+const PATH_TO_DATABASE = `${os.homedir()}/.kss-cli/secrets.json`;
+
 export interface ISecret {
     id: number,
     name: string,

@@ -1,4 +1,8 @@
 {
+  "name": "kss-cli",
+  "description": "Keep your secrets safe with kss-cli secrets manager",
+  "version": "1.0.0",
+  "main": "./main.js",
   "devDependencies": {
     "@types/node": "^20.4.2",
     "esbuild": "^0.18.16",
