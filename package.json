@@ -23,5 +23,16 @@
     "node-clipboardy": "^1.0.3",
     "node-encryption": "^1.0.2",
     "yargs": "^17.7.2"
+  },
+  "keywords": [
+    "cli",
+    "secrets",
+    "passwords",
+    "keychain",
+    "encryption"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/kss-cli.git"
   }
 }
