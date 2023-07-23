@@ -26,7 +26,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var import_yargs = __toESM(require("yargs"));
 
 // src/commands/add.ts
-var import_enquirer3 = require("enquirer");
+var import_enquirer2 = require("enquirer");
 
 // src/utilities.ts
 var import_chalk = __toESM(require("chalk"));
@@ -113,7 +113,6 @@ var searchBySecretName = (secretName) => {
 };
 
 // src/keychain.ts
-var import_enquirer2 = require("enquirer");
 var import_keytar = __toESM(require("keytar"));
 
 // src/commands/config.ts
@@ -181,20 +180,14 @@ var keychainAlwaysAllow = async () => {
 };
 
 // src/keychain.ts
+var import_crypto = __toESM(require("crypto"));
 var SERVICE = "KSS-CLI";
 var ENCRYPTION_KEY_ACCOUNT = "KSS-CLI Encryption Key";
 var CONFIGURATION_OPTIONS_ACCOUNT = "KSS-CLI Configuration Options";
 var getEncryptionKey = async () => {
   let encryptionKey = await import_keytar.default.getPassword(SERVICE, ENCRYPTION_KEY_ACCOUNT);
   if (!encryptionKey) {
-    ({ encryptionKey } = await (0, import_enquirer2.prompt)({
-      type: "invisible",
-      name: "encryptionKey",
-      message: "Encryption Key: (This encryption key will be stored in keychain and used to encrypt/decrypt all your secrets)"
-    }));
-    if ((encryptionKey?.length ?? 0) < 8) {
-      exitWithError("Encryption Key can't be that short.");
-    }
+    encryptionKey = generateEncryptionKey();
     import_keytar.default.setPassword(SERVICE, ENCRYPTION_KEY_ACCOUNT, encryptionKey);
   }
   return encryptionKey;
@@ -209,6 +202,10 @@ var getConfigurationOptions = async () => {
     return DEFAULT_CONFIGURATION;
   }
   return JSON.parse(configurationOptions);
+};
+var generateEncryptionKey = () => {
+  const encryptionKey = import_crypto.default.randomBytes(64);
+  return encryptionKey.toString("base64");
 };
 
 // src/commands/add.ts
@@ -235,9 +232,9 @@ var addCommandHandler = async (argv) => {
   const encryptionKey = await getEncryptionKey();
   let answers;
   if (argv.name) {
-    answers = await (0, import_enquirer3.prompt)(questions.filter((question) => question.name !== "secretName"));
+    answers = await (0, import_enquirer2.prompt)(questions.filter((question) => question.name !== "secretName"));
   } else {
-    answers = await (0, import_enquirer3.prompt)(questions);
+    answers = await (0, import_enquirer2.prompt)(questions);
   }
   answers["secretName"] ??= argv.name;
   validateForBlankString(answers);
@@ -266,7 +263,7 @@ var validateSecretNameForUniqueness = (secretName) => {
 };
 
 // src/commands/rm.ts
-var import_enquirer4 = require("enquirer");
+var import_enquirer3 = require("enquirer");
 var import_chalk4 = __toESM(require("chalk"));
 var rmCommandName = "rm [name]";
 var rmCommandDescription = "Delete a specific secret by the given name";
@@ -275,7 +272,7 @@ var rmCommandHandler = async (argv) => {
   if (argv.name) {
     secretName = argv.name;
   } else {
-    ({ secretName } = await (0, import_enquirer4.prompt)({
+    ({ secretName } = await (0, import_enquirer3.prompt)({
       type: "input",
       name: "secretName",
       message: "name: (The name of the secret to be removed)"
@@ -287,7 +284,7 @@ var rmCommandHandler = async (argv) => {
   }
   const closestMatch = searchResults[0];
   if (closestMatch.name !== secretName) {
-    const confirmation2 = await (0, import_enquirer4.prompt)({
+    const confirmation2 = await (0, import_enquirer3.prompt)({
       type: "confirm",
       name: "isRightSecret",
       message: `Secret ${import_chalk4.default.green(`'${secretName}'`)} not found. Did you mean ${import_chalk4.default.green(`'${closestMatch.name}'`)}?`
@@ -297,7 +294,7 @@ var rmCommandHandler = async (argv) => {
     }
     secretName = closestMatch.name;
   }
-  const confirmation = await (0, import_enquirer4.prompt)({
+  const confirmation = await (0, import_enquirer3.prompt)({
     type: "confirm",
     name: "removalConfirmation",
     message: `Are you sure you want to delete the secret '${import_chalk4.default.green(secretName)}'?`
@@ -335,7 +332,7 @@ var lsCommandHandler = async (argv) => {
 };
 
 // src/commands/cp.ts
-var import_enquirer5 = require("enquirer");
+var import_enquirer4 = require("enquirer");
 var import_chalk6 = __toESM(require("chalk"));
 var import_node_clipboardy = __toESM(require("node-clipboardy"));
 var import_node_encryption2 = require("node-encryption");
@@ -347,7 +344,7 @@ var cpCommandHandler = async (argv) => {
   if (argv.name) {
     secretName = argv.name;
   } else {
-    ({ secretName } = await (0, import_enquirer5.prompt)({
+    ({ secretName } = await (0, import_enquirer4.prompt)({
       type: "input",
       name: "secretName",
       message: "name: (The name of the secret to be copied)"
@@ -359,7 +356,7 @@ var cpCommandHandler = async (argv) => {
   }
   const closestMatch = searchResults[0];
   if (closestMatch.name !== secretName) {
-    const confirmation = await (0, import_enquirer5.prompt)({
+    const confirmation = await (0, import_enquirer4.prompt)({
       type: "confirm",
       name: "isRightSecret",
       message: `Secret ${import_chalk6.default.green(`'${secretName}'`)} not found. Did you mean ${import_chalk6.default.green(`'${closestMatch.name}'`)}?`

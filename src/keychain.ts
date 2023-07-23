@@ -1,7 +1,6 @@
-import { prompt } from 'enquirer';
 import keytar from 'keytar';
-import { exitWithError } from './utilities';
 import { DEFAULT_CONFIGURATION } from './commands/config';
+import crypto from 'crypto';
 
 const SERVICE = 'KSS-CLI';
 const ENCRYPTION_KEY_ACCOUNT = 'KSS-CLI Encryption Key';
@@ -11,15 +10,7 @@ export const getEncryptionKey = async () => {
     let encryptionKey = await keytar.getPassword(SERVICE, ENCRYPTION_KEY_ACCOUNT);
 
     if (!encryptionKey) {
-        ({ encryptionKey } = await prompt({
-            type: 'invisible',
-            name: 'encryptionKey',
-            message: 'Encryption Key: (This encryption key will be stored in keychain and used to encrypt/decrypt all your secrets)'
-        }));
-
-        if ((encryptionKey?.length ?? 0) < 8) {
-            exitWithError('Encryption Key can\'t be that short.');
-        }
+        encryptionKey = generateEncryptionKey();
 
         keytar.setPassword(SERVICE, ENCRYPTION_KEY_ACCOUNT, encryptionKey as string);
     }
@@ -41,4 +32,10 @@ export const getConfigurationOptions = async (): Promise<Record<string, string>>
     }
 
     return JSON.parse(configurationOptions);
+}
+
+const generateEncryptionKey = (): string => {
+    const encryptionKey = crypto.randomBytes(64);
+
+    return encryptionKey.toString('base64');
 }
