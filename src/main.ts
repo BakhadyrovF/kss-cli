@@ -16,6 +16,7 @@ const commands = yargs
     .help('help')
     .version('1.0.0')
     .demandCommand(1, 'You must provide at least one command.')
+    .strictCommands()
     .command(addCommandName, addCommandDescription, positionalName, addCommandHandler)
     .command(rmCommandName, rmCommandDescription, positionalName, rmCommandHandler)
     .command(lsCommandName, lsCommandDescription, positionalName, lsCommandHandler)

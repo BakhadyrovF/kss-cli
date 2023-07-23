@@ -4,6 +4,7 @@ import { exitWithError, logSuccessMessage } from '../utilities';
 import chalk from 'chalk';
 import ncp from 'node-clipboardy';
 import { decrypt } from 'node-encryption';
+import { authenticate } from '../authentication';
 
 
 export const cpCommandName = 'cp [name]';
@@ -40,6 +41,12 @@ export const cpCommandHandler = async (argv: any) => {
             exitWithError('Operation cancelled.');
         }
         secretName = closestMatch.name;
+    }
+
+    const isAuthenticated = await authenticate();
+
+    if (!isAuthenticated) {
+        exitWithError('Authentication failed.');
     }
 
     ncp.writeSync(decrypt(closestMatch.secret, process.env.ENCRYPTION_KEY).toString());
