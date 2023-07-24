@@ -1,7 +1,4 @@
-import fs from 'fs';
-import os from 'os';
-
-const PATH_TO_DATABASE = `${os.homedir()}/.kss-cli/secrets.json`;
+import { getSecretsCollection, setSecretsCollection } from './keychain';
 
 export interface ISecret {
     id: number,
@@ -9,61 +6,38 @@ export interface ISecret {
     secret: string
 }
 
-export const insertNewSecret = (secretName: string, secret: string) => {
-    if (!fs.existsSync(PATH_TO_DATABASE)) {
-        fs.writeFileSync(PATH_TO_DATABASE, JSON.stringify([{
-            id: getIdForNewSecret(),
-            name: secretName,
-            secret
-        }]));
-    } else {
-        const secrets = getAllSecrets();
-        secrets.push(
-            {
-                id: getIdForNewSecret(),
-                name: secretName,
-                secret
-            }
-        );
-        fs.writeFileSync(PATH_TO_DATABASE, JSON.stringify(secrets));
-    }
+export const insertNewSecret = async (secretName: string, secret: string): Promise<void> => {
+    const secrets = await getAllSecrets();
+
+    secrets.push({
+        id: await getIdForNewSecret(),
+        name: secretName,
+        secret
+    });
+
+    return setSecretsCollection(secrets);
 }
 
-export const getAllSecrets = (): Array<ISecret> => {
-    let secrets: Array<ISecret> = [];
-    try {
-        const secretsJson = fs.readFileSync(PATH_TO_DATABASE).toString();
-
-        if (secretsJson) {
-            return JSON.parse(secretsJson);
-        }
-    } catch {
-        return secrets;
-    }
-
-    return secrets
+export const getAllSecrets = (): Promise<Array<ISecret>> => {
+    return getSecretsCollection();
 }
 
-export const deleteBySecretName = (secretName: string): void => {
-    const secrets = getAllSecrets();
+export const deleteBySecretName = async (secretName: string): Promise<void> => {
+    const secrets = await getAllSecrets();
 
     const secretsWithoutTarget = secrets.filter(secret => secret.name !== secretName);
 
-    fs.writeFileSync(PATH_TO_DATABASE, JSON.stringify(secretsWithoutTarget));
+    return setSecretsCollection(secretsWithoutTarget);
 }
 
-const getIdForNewSecret = (): number => {
-    const secrets = getAllSecrets();
+const getIdForNewSecret = async (): Promise<number> => {
+    const secrets = await getAllSecrets();
 
-    if (!secrets) {
+    if (secrets.length === 0) {
         return 1;
     }
 
-    const latestSecret = secrets.at(secrets.length - 1);
-
-    if (!latestSecret) {
-        return 1;
-    }
+    const latestSecret = secrets.at(secrets.length - 1) as ISecret;
 
     return latestSecret.id as number + 1;
 }

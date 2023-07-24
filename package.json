@@ -1,7 +1,7 @@
 {
   "name": "kss-cli",
   "description": "Keep Secrets Safe - Command Line Interface",
-  "version": "1.0.7",
+  "version": "1.0.0",
   "main": "main.js",
   "bin": {
     "kss": "./main.js"
@@ -35,7 +35,18 @@
     "secrets",
     "passwords",
     "keychain",
-    "encryption"
+    "encryption",
+    "mac",
+    "osx",
+    "manager",
+    "answer",
+    "ask",
+    "terminal",
+    "nodejs",
+    "stdin",
+    "stdout",
+    "command",
+    "command-line"
   ],
   "repository": {
     "type": "git",

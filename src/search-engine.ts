@@ -11,8 +11,8 @@ const minisearch = new Minisearch({
 });
 
 
-export const searchBySecretName = (secretName: string) => {
-    minisearch.addAll(getAllSecrets());
+export const searchBySecretName = async (secretName: string) => {
+    minisearch.addAll(await getAllSecrets());
     const searchResults = minisearch.search(secretName);
 
     return searchResults;

@@ -9,9 +9,9 @@ export const lsCommandHandler = async (argv: Record<string, string>) => {
     let secrets: Array<SearchResult | ISecret>;
 
     if (argv.name) {
-        secrets = searchBySecretName(argv.name);
+        secrets = await searchBySecretName(argv.name);
     } else {
-        secrets = getAllSecrets();
+        secrets = await getAllSecrets();
     }
 
     const secretNames = secrets.map(secret => chalk.bold.green((` - ${secret.name}`)));

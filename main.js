@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 "use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -39,78 +38,6 @@ ${message}`));
 var logSuccessMessage = (message) => {
   console.log(import_chalk.default.green(`
 ${message}`));
-};
-
-// src/database.ts
-var import_fs = __toESM(require("fs"));
-var import_os = __toESM(require("os"));
-var PATH_TO_DATABASE = `${import_os.default.homedir()}/.kss-cli/secrets.json`;
-var insertNewSecret = (secretName, secret) => {
-  if (!import_fs.default.existsSync(PATH_TO_DATABASE)) {
-    import_fs.default.writeFileSync(PATH_TO_DATABASE, JSON.stringify([{
-      id: getIdForNewSecret(),
-      name: secretName,
-      secret
-    }]));
-  } else {
-    const secrets = getAllSecrets();
-    secrets.push(
-      {
-        id: getIdForNewSecret(),
-        name: secretName,
-        secret
-      }
-    );
-    import_fs.default.writeFileSync(PATH_TO_DATABASE, JSON.stringify(secrets));
-  }
-};
-var getAllSecrets = () => {
-  let secrets = [];
-  try {
-    const secretsJson = import_fs.default.readFileSync(PATH_TO_DATABASE).toString();
-    if (secretsJson) {
-      return JSON.parse(secretsJson);
-    }
-  } catch {
-    return secrets;
-  }
-  return secrets;
-};
-var deleteBySecretName = (secretName) => {
-  const secrets = getAllSecrets();
-  const secretsWithoutTarget = secrets.filter((secret) => secret.name !== secretName);
-  import_fs.default.writeFileSync(PATH_TO_DATABASE, JSON.stringify(secretsWithoutTarget));
-};
-var getIdForNewSecret = () => {
-  const secrets = getAllSecrets();
-  if (!secrets) {
-    return 1;
-  }
-  const latestSecret = secrets.at(secrets.length - 1);
-  if (!latestSecret) {
-    return 1;
-  }
-  return latestSecret.id + 1;
-};
-
-// src/commands/add.ts
-var import_node_encryption = require("node-encryption");
-var import_chalk3 = __toESM(require("chalk"));
-
-// src/search-engine.ts
-var import_minisearch = __toESM(require("minisearch"));
-var minisearch = new import_minisearch.default({
-  fields: ["name"],
-  storeFields: ["name", "secret"],
-  searchOptions: {
-    fuzzy: 0.3,
-    prefix: true
-  }
-});
-var searchBySecretName = (secretName) => {
-  minisearch.addAll(getAllSecrets());
-  const searchResults = minisearch.search(secretName);
-  return searchResults;
 };
 
 // src/keychain.ts
@@ -185,6 +112,7 @@ var import_crypto = __toESM(require("crypto"));
 var SERVICE = "KSS-CLI";
 var ENCRYPTION_KEY_ACCOUNT = "KSS-CLI Encryption Key";
 var CONFIGURATION_OPTIONS_ACCOUNT = "KSS-CLI Configuration Options";
+var SECRETS_COLLECTION_ACCOUNT = "KSS-CLI Secrets Collection";
 var getEncryptionKey = async () => {
   let encryptionKey = await import_keytar.default.getPassword(SERVICE, ENCRYPTION_KEY_ACCOUNT);
   if (!encryptionKey) {
@@ -204,9 +132,67 @@ var getConfigurationOptions = async () => {
   }
   return JSON.parse(configurationOptions);
 };
+var setSecretsCollection = (secrets) => {
+  return import_keytar.default.setPassword(SERVICE, SECRETS_COLLECTION_ACCOUNT, JSON.stringify(secrets));
+};
+var getSecretsCollection = async () => {
+  const secrets = await import_keytar.default.getPassword(SERVICE, SECRETS_COLLECTION_ACCOUNT);
+  if (!secrets) {
+    import_keytar.default.setPassword(SERVICE, SECRETS_COLLECTION_ACCOUNT, JSON.stringify([]));
+    return [];
+  }
+  return JSON.parse(secrets);
+};
 var generateEncryptionKey = () => {
   const encryptionKey = import_crypto.default.randomBytes(64);
   return encryptionKey.toString("base64");
+};
+
+// src/database.ts
+var insertNewSecret = async (secretName, secret) => {
+  const secrets = await getAllSecrets();
+  secrets.push({
+    id: await getIdForNewSecret(),
+    name: secretName,
+    secret
+  });
+  return setSecretsCollection(secrets);
+};
+var getAllSecrets = () => {
+  return getSecretsCollection();
+};
+var deleteBySecretName = async (secretName) => {
+  const secrets = await getAllSecrets();
+  const secretsWithoutTarget = secrets.filter((secret) => secret.name !== secretName);
+  return setSecretsCollection(secretsWithoutTarget);
+};
+var getIdForNewSecret = async () => {
+  const secrets = await getAllSecrets();
+  if (secrets.length === 0) {
+    return 1;
+  }
+  const latestSecret = secrets.at(secrets.length - 1);
+  return latestSecret.id + 1;
+};
+
+// src/commands/add.ts
+var import_node_encryption = require("node-encryption");
+var import_chalk3 = __toESM(require("chalk"));
+
+// src/search-engine.ts
+var import_minisearch = __toESM(require("minisearch"));
+var minisearch = new import_minisearch.default({
+  fields: ["name"],
+  storeFields: ["name", "secret"],
+  searchOptions: {
+    fuzzy: 0.3,
+    prefix: true
+  }
+});
+var searchBySecretName = async (secretName) => {
+  minisearch.addAll(await getAllSecrets());
+  const searchResults = minisearch.search(secretName);
+  return searchResults;
 };
 
 // src/commands/add.ts
@@ -240,8 +226,8 @@ var addCommandHandler = async (argv) => {
   answers["secretName"] ??= argv.name;
   validateForBlankString(answers);
   validateSecretConfirmation(answers.secret, answers.secretConfirmation);
-  validateSecretNameForUniqueness(answers.secretName);
-  insertNewSecret(answers.secretName, (0, import_node_encryption.encrypt)(answers.secret, encryptionKey));
+  await validateSecretNameForUniqueness(answers.secretName);
+  await insertNewSecret(answers.secretName, (0, import_node_encryption.encrypt)(answers.secret, encryptionKey));
   logSuccessMessage("New secret has been successfully saved. I will keep it safe for you!");
 };
 var validateForBlankString = (answers) => {
@@ -256,8 +242,8 @@ var validateSecretConfirmation = (password, passwordConfirmation) => {
     exitWithError("Secrets do not match!");
   }
 };
-var validateSecretNameForUniqueness = (secretName) => {
-  const closestMatch = searchBySecretName(secretName)[0];
+var validateSecretNameForUniqueness = async (secretName) => {
+  const closestMatch = (await searchBySecretName(secretName))[0];
   if (closestMatch?.name === secretName) {
     exitWithError(`Secret with name ${import_chalk3.default.green(`'${secretName}'`)} already exists`);
   }
@@ -279,7 +265,7 @@ var rmCommandHandler = async (argv) => {
       message: "name: (The name of the secret to be removed)"
     }));
   }
-  const searchResults = searchBySecretName(secretName);
+  const searchResults = await searchBySecretName(secretName);
   if (searchResults.length === 0) {
     exitWithError(`No matches found for the given name: ${import_chalk4.default.green(`'${secretName}'`)}`);
   }
@@ -310,7 +296,7 @@ var rmCommandHandler = async (argv) => {
       exitWithError("Authentication failed");
     }
   }
-  deleteBySecretName(secretName);
+  await deleteBySecretName(secretName);
   logSuccessMessage("Secret has been successfully removed.");
 };
 
@@ -321,9 +307,9 @@ var lsCommandDescription = "List all secrets or specific ones by their name";
 var lsCommandHandler = async (argv) => {
   let secrets;
   if (argv.name) {
-    secrets = searchBySecretName(argv.name);
+    secrets = await searchBySecretName(argv.name);
   } else {
-    secrets = getAllSecrets();
+    secrets = await getAllSecrets();
   }
   const secretNames = secrets.map((secret) => import_chalk5.default.bold.green(` - ${secret.name}`));
   if (secretNames.length === 0) {
@@ -351,7 +337,7 @@ var cpCommandHandler = async (argv) => {
       message: "name: (The name of the secret to be copied)"
     }));
   }
-  const searchResults = searchBySecretName(secretName);
+  const searchResults = await searchBySecretName(secretName);
   if (searchResults.length === 0) {
     exitWithError(`No matches found for the given name: ${import_chalk6.default.green(`'${secretName}'`)}`);
   }
@@ -379,12 +365,6 @@ var cpCommandHandler = async (argv) => {
 };
 
 // src/main.ts
-var import_fs2 = __toESM(require("fs"));
-var import_os2 = __toESM(require("os"));
-var APP_DIRECTORY = `${import_os2.default.homedir()}/.kss-cli`;
-if (!import_fs2.default.existsSync(APP_DIRECTORY)) {
-  import_fs2.default.mkdirSync(APP_DIRECTORY);
-}
 var positionalName = (yargs2) => {
   yargs2.positional("name", {
     describe: "The name of the secret, if not set, it will be taken interactively"

@@ -4,13 +4,6 @@ import { rmCommandName, rmCommandDescription, rmCommandHandler } from './command
 import { lsCommandDescription, lsCommandHandler, lsCommandName } from './commands/ls';
 import { cpCommandDescription, cpCommandHandler, cpCommandName } from './commands/cp';
 import { configCommandDescription, configCommandHandler, configCommandName } from './commands/config';
-import fs from 'fs';
-import os from 'os';
-
-const APP_DIRECTORY = `${os.homedir()}/.kss-cli`;
-if (!fs.existsSync(APP_DIRECTORY)) {
-    fs.mkdirSync(APP_DIRECTORY);
-}
 
 const positionalName = (yargs: Record<string, Function>) => {
     yargs.positional('name', {

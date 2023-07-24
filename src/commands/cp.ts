@@ -24,7 +24,7 @@ export const cpCommandHandler = async (argv: any) => {
         }));
     }
 
-    const searchResults = searchBySecretName(secretName);
+    const searchResults = await searchBySecretName(secretName);
 
     if (searchResults.length === 0) {
         exitWithError(`No matches found for the given name: ${chalk.green(`'${secretName}'`)}`);

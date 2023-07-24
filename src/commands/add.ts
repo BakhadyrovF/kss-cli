@@ -41,9 +41,9 @@ export const addCommandHandler = async (argv: Record<string, string>) => {
 
     validateForBlankString(answers);
     validateSecretConfirmation(answers.secret, answers.secretConfirmation);
-    validateSecretNameForUniqueness(answers.secretName);
+    await validateSecretNameForUniqueness(answers.secretName);
 
-    insertNewSecret(answers.secretName, encrypt(answers.secret, encryptionKey));
+    await insertNewSecret(answers.secretName, encrypt(answers.secret, encryptionKey));
 
     logSuccessMessage('New secret has been successfully saved. I will keep it safe for you!');
 };
@@ -62,8 +62,8 @@ const validateSecretConfirmation = (password: string, passwordConfirmation: stri
     }
 }
 
-const validateSecretNameForUniqueness = (secretName: string): void => {
-    const closestMatch = searchBySecretName(secretName)[0];
+const validateSecretNameForUniqueness = async (secretName: string): Promise<void> => {
+    const closestMatch = (await searchBySecretName(secretName))[0];
 
     if (closestMatch?.name === secretName) {
         exitWithError(`Secret with name ${chalk.green(`'${secretName}'`)} already exists`);

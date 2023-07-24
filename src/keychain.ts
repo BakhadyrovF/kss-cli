@@ -1,10 +1,12 @@
 import keytar from 'keytar';
 import { DEFAULT_CONFIGURATION } from './commands/config';
 import crypto from 'crypto';
+import { ISecret } from 'database';
 
 const SERVICE = 'KSS-CLI';
 const ENCRYPTION_KEY_ACCOUNT = 'KSS-CLI Encryption Key';
 const CONFIGURATION_OPTIONS_ACCOUNT = 'KSS-CLI Configuration Options';
+const SECRETS_COLLECTION_ACCOUNT = 'KSS-CLI Secrets Collection';
 
 export const getEncryptionKey = async () => {
     let encryptionKey = await keytar.getPassword(SERVICE, ENCRYPTION_KEY_ACCOUNT);
@@ -32,6 +34,21 @@ export const getConfigurationOptions = async (): Promise<Record<string, string>>
     }
 
     return JSON.parse(configurationOptions);
+}
+
+export const setSecretsCollection = (secrets: Array<ISecret>) => {
+    return keytar.setPassword(SERVICE, SECRETS_COLLECTION_ACCOUNT, JSON.stringify(secrets));
+}
+
+export const getSecretsCollection = async (): Promise<Array<ISecret>> => {
+    const secrets = await keytar.getPassword(SERVICE, SECRETS_COLLECTION_ACCOUNT);
+
+    if (!secrets) {
+        keytar.setPassword(SERVICE, SECRETS_COLLECTION_ACCOUNT, JSON.stringify([]));
+        return [];
+    }
+
+    return JSON.parse(secrets);
 }
 
 const generateEncryptionKey = (): string => {

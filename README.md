@@ -14,14 +14,16 @@ To install **KSS-CLI** globally, use the following **npm** command:
 ```bash
 npm install -g kss-cli
 ```
-> If command above gives an error, it is because `npm` can't create a symlink in your `usr/local/bin` (may be different depending on OS) directory.
+> If command above gives an error, it is because `npm` can't create a symlink in your `usr/local/bin` (may be different) directory.
 Since **KSS-CLI** only for personal usage in your own device, you can use `sudo` to resolve this error.  
 
 ## Key Features
 
-**Encryption Key Management**: When you run any command for the first time, **KSS-CLI** will attempt to retrieve the encryption key from the system's keychain. If the key is not found, **KSS-CLI** will generate a cryptographically secure encryption key and store it in the keychain. This ensures that your secrets remain secure, and **KSS-CLI** can access the key without further user intervention.
+**Encryption Key Management**: When you run any command for the first time, **KSS-CLI** will attempt to retrieve the encryption key from the system's keychain. If the key is not found, **KSS-CLI** will generate a cryptographically secure encryption key and store it in the **keychain**. This ensures that your secrets remain secure, and **KSS-CLI** can access the key without further user intervention.
 
-**Passwords/Secrets Management**: **KSS-CLI** securely stores passwords and secrets in an encrypted form. All encryption and decryption operations are performed using the encryption key stored in the system's keychain, ensuring your sensitive information is protected.
+**Passwords/Secrets Management**: **KSS-CLI** securely stores passwords and secrets in an encrypted form in system's **keychain** also. All encryption and decryption operations are performed using the encryption key, ensuring your sensitive information is protected.
+
+**Keychain**: Read more about [keychain](https://en.wikipedia.org/wiki/Keychain_(software)).
 
 ## Commands
 
