@@ -4,7 +4,7 @@ import { searchBySecretName } from '../search-engine';
 import chalk from 'chalk';
 
 export const lsCommandName = 'ls [name]';
-export const lsCommandDescription = 'List all secrets or specific ones by their name';
+export const lsCommandDescription = 'List all secrets or specific ones by name';
 export const lsCommandHandler = async (argv: Record<string, string>) => {
     let secrets: Array<SearchResult | ISecret>;
 

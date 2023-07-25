@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 "use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -254,7 +253,7 @@ var validateSecretNameForUniqueness = async (secretName) => {
 var import_enquirer3 = require("enquirer");
 var import_chalk4 = __toESM(require("chalk"));
 var rmCommandName = "rm [name]";
-var rmCommandDescription = "Delete a specific secret by the given name";
+var rmCommandDescription = "Delete a specific secret";
 var rmCommandHandler = async (argv) => {
   let secretName;
   if (argv.name) {
@@ -304,7 +303,7 @@ var rmCommandHandler = async (argv) => {
 // src/commands/ls.ts
 var import_chalk5 = __toESM(require("chalk"));
 var lsCommandName = "ls [name]";
-var lsCommandDescription = "List all secrets or specific ones by their name";
+var lsCommandDescription = "List all secrets or specific ones by name";
 var lsCommandHandler = async (argv) => {
   let secrets;
   if (argv.name) {

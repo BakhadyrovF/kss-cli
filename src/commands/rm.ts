@@ -8,7 +8,7 @@ import { authenticate } from '../authentication';
 import { getConfigurationOptions } from '../keychain';
 
 export const rmCommandName = 'rm [name]';
-export const rmCommandDescription = 'Delete a specific secret by the given name'
+export const rmCommandDescription = 'Delete a specific secret'
 export const rmCommandHandler = async (argv: Record<string, string>) => {
     let secretName: string;
     if (argv.name) {
