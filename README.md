@@ -5,16 +5,19 @@
 ## Prerequisites
 
 * `macOS`
-* `nodejs` installed
+* `NodeJS`
 
 ## Installation
 
-To install **KSS-CLI** globally, use the following **npm** command:
+Using **npm**:
 
 ```bash
 npm install -g kss-cli
 ```
-> If the above command fails, it's either because `npm` can't create a folder for the package in `/usr/local/lib/node_modules` or it can't create a symlink in `/usr/local/bin`. Since **KSS-CLI** is only for personal use on a personal device, you can solve this problem using `sudo`. (Directories may vary).  
+Using **yarn**:
+```bash
+yarn global add kss-cli
+```
 
 ## Key Features
 

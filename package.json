@@ -1,7 +1,7 @@
 {
   "name": "kss-cli",
   "description": "Keep Secrets Safe - Command Line Interface",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "main.js",
   "bin": {
     "kss": "./main.js"
@@ -51,5 +51,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/BakhadyrovF/kss-cli"
-  }
+  },
+  "license": "MIT"
 }
