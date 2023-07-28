@@ -266,7 +266,7 @@ var rmCommandHandler = async (argv) => {
       message: "name: (The name of the secret to be removed)"
     }));
   }
-  const searchResults = await searchBySecretName(secretName);
+  const searchResults = await searchBySecretName(String(secretName));
   if (searchResults.length === 0) {
     exitWithError(`No matches found for the given name: ${import_chalk4.default.green(`'${secretName}'`)}`);
   }
@@ -308,7 +308,7 @@ var lsCommandDescription = "List all secrets or specific ones by name";
 var lsCommandHandler = async (argv) => {
   let secrets;
   if (argv.name) {
-    secrets = await searchBySecretName(argv.name);
+    secrets = await searchBySecretName(String(argv.name));
   } else {
     secrets = await getAllSecrets();
   }
@@ -338,7 +338,7 @@ var cpCommandHandler = async (argv) => {
       message: "name: (The name of the secret to be copied)"
     }));
   }
-  const searchResults = await searchBySecretName(secretName);
+  const searchResults = await searchBySecretName(String(secretName));
   if (searchResults.length === 0) {
     exitWithError(`No matches found for the given name: ${import_chalk6.default.green(`'${secretName}'`)}`);
   }

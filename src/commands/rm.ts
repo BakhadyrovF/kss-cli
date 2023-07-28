@@ -21,7 +21,7 @@ export const rmCommandHandler = async (argv: Record<string, string>) => {
         }));
     }
 
-    const searchResults: Array<SearchResult> = await searchBySecretName(secretName);
+    const searchResults: Array<SearchResult> = await searchBySecretName(String(secretName));
 
     if (searchResults.length === 0) {
         exitWithError(`No matches found for the given name: ${chalk.green(`'${secretName}'`)}`);

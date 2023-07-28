@@ -9,7 +9,7 @@ export const lsCommandHandler = async (argv: Record<string, string>) => {
     let secrets: Array<SearchResult | ISecret>;
 
     if (argv.name) {
-        secrets = await searchBySecretName(argv.name);
+        secrets = await searchBySecretName(String(argv.name));
     } else {
         secrets = await getAllSecrets();
     }
