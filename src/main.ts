@@ -14,7 +14,7 @@ const positionalName = (yargs: Record<string, Function>) => {
 const kss = yargs
     .scriptName('kss')
     .help('help')
-    .version('1.0.13')
+    .version('1.0.15')
     .demandCommand(1, 'You must provide at least one command.')
     .strictCommands()
     .command(addCommandName, addCommandDescription, positionalName, addCommandHandler)

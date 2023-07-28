@@ -371,7 +371,7 @@ var positionalName = (yargs2) => {
     describe: "The name of the secret, if not set, it will be taken interactively"
   });
 };
-var kss = import_yargs.default.scriptName("kss").help("help").version("1.0.13").demandCommand(1, "You must provide at least one command.").strictCommands().command(addCommandName, addCommandDescription, positionalName, addCommandHandler).command(rmCommandName, rmCommandDescription, positionalName, rmCommandHandler).command(lsCommandName, lsCommandDescription, positionalName, lsCommandHandler).command(cpCommandName, cpCommandDescription, positionalName, cpCommandHandler).command(configCommandName, configCommandDescription, (yargs2) => {
+var kss = import_yargs.default.scriptName("kss").help("help").version("1.0.15").demandCommand(1, "You must provide at least one command.").strictCommands().command(addCommandName, addCommandDescription, positionalName, addCommandHandler).command(rmCommandName, rmCommandDescription, positionalName, rmCommandHandler).command(lsCommandName, lsCommandDescription, positionalName, lsCommandHandler).command(cpCommandName, cpCommandDescription, positionalName, cpCommandHandler).command(configCommandName, configCommandDescription, (yargs2) => {
   yargs2.positional("ls", {
     describe: "List available configuration options with their description"
   });
